@@ -86,7 +86,7 @@ module Twitter
         if index % 4 != 0
           new_text << chunk
         else
-          new_text << chunk.gsub(Twitter::Regex[:auto_link_usernames_or_lists]) do
+          new_text << chunk.to_s.gsub(Twitter::Regex[:auto_link_usernames_or_lists]) do
             before, at, user, slash_listname, after = $1, $2, $3, $4, $'
             if slash_listname && !options[:suppress_lists]
               # the link is a list
@@ -127,7 +127,7 @@ module Twitter
       options[:target] ||= DEFAULT_TARGET
       extra_html = HTML_ATTR_NO_FOLLOW unless options[:suppress_no_follow]
 
-      text.gsub(Twitter::Regex[:auto_link_hashtags]) do
+      text.to_s.gsub(Twitter::Regex[:auto_link_hashtags]) do
         before = $1
         hash = $2
         text = $3
@@ -144,7 +144,7 @@ module Twitter
       options = href_options.dup
       options[:rel] = "nofollow" unless options.delete(:suppress_no_follow)
 
-      text.gsub(Twitter::Regex[:valid_url]) do
+      text.to_s.gsub(Twitter::Regex[:valid_url]) do
         all, before, url, protocol, domain, path, query_string = $1, $2, $3, $4, $5, $6, $7
         if !protocol.blank?
           html_attrs = tag_options(options.stringify_keys) || ""
